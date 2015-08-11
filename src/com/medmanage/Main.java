@@ -13,80 +13,131 @@ public class Main {
     public static int sumMedians = 0;
     public static int n;
     public static String[] argInput;
+    public static int hold;
 
     public static void log(Object args) {
         System.out.println(args.toString());
     }
 
-    public static void insertMax(int arg){
+    public static void insertMax(int arg) {
         lowHeap.add(arg);
-        int index = lowHeap.size()-1;
+        int index = lowHeap.size() - 1;
         int parent;
         boolean notHeaped = true;
-        while (notHeaped){
+        while (notHeaped) {
 
             //First item added or top of the heap
-            if (index==0){
+            if (index == 0) {
                 notHeaped = false;
             }
 
             //Check against parent
-            if (notHeaped){
-            //Grab the parent
-                if(index%2==0){
-                   parent = (index / 2)-1;
-                }
-                else { parent = (index - 1) / 2; }
-                if (lowHeap.get(parent)<lowHeap.get(index)){
-                    lowHeap.set(index,lowHeap.get(parent));
-                    lowHeap.set(parent,arg);
-                    index = parent;
-                }
-                else {notHeaped = false;}
-            }
-        }
-    }
-
-    public static void insertMin(int arg){
-        highHeap.add(arg);
-        int index = highHeap.size()-1;
-        int parent;
-        boolean notHeaped = true;
-        while (notHeaped){
-
-            //First item added or top of the heap
-            if (index==0){
-                notHeaped = false;
-            }
-
-            //Check against parent
-            if (notHeaped){
+            if (notHeaped) {
                 //Grab the parent
-                if(index%2==0){
-                    parent = (index / 2)-1;
+                if (index % 2 == 0) {
+                    parent = (index / 2) - 1;
+                } else {
+                    parent = (index - 1) / 2;
                 }
-                else { parent = (index - 1) / 2; }
-                if (highHeap.get(parent)>highHeap.get(index)){
-                    highHeap.set(index,highHeap.get(parent));
-                    highHeap.set(parent,arg);
+                if (lowHeap.get(parent) < lowHeap.get(index)) {
+                    lowHeap.set(index, lowHeap.get(parent));
+                    lowHeap.set(parent, arg);
                     index = parent;
+                } else {
+                    notHeaped = false;
                 }
-                else {notHeaped = false;}
             }
         }
     }
 
-    public static void extract(){
+    public static void insertMin(int arg) {
+        highHeap.add(arg);
+        int index = highHeap.size() - 1;
+        int parent;
+        boolean notHeaped = true;
+        while (notHeaped) {
 
+            //First item added or top of the heap
+            if (index == 0) {
+                notHeaped = false;
+            }
+
+            //Check against parent
+            if (notHeaped) {
+                //Grab the parent
+                if (index % 2 == 0) {
+                    parent = (index / 2) - 1;
+                } else {
+                    parent = (index - 1) / 2;
+                }
+                if (highHeap.get(parent) > highHeap.get(index)) {
+                    highHeap.set(index, highHeap.get(parent));
+                    highHeap.set(parent, arg);
+                    index = parent;
+                } else {
+                    notHeaped = false;
+                }
+            }
+        }
     }
 
-    public static void parse(){
+    public static void extractMin() {
+        hold = highHeap.get(0);
+        int child1index = 1;
+        int child2index = 2;
+        int child1 = 0;
+        int child2 = 0;
+        boolean child1exists;
+        boolean child2exists;
+        int index = 0;
+        boolean notHeaped = true;
+        while (notHeaped) {
+
+            //Are we at the last #?
+            if (index >= highHeap.size()) {
+                notHeaped = false;
+            }
+
+            //Compare to the level below
+            if (notHeaped) {
+                child1exists = false;
+                child2exists = false;
+                if (child2index < highHeap.size()) {
+                    child2 = highHeap.get(child2index);
+                    child1exists = true;
+                }
+                if (child1index < highHeap.size()) {
+                    child2exists = true;
+                    child1 = highHeap.get(child1index);
+                }
+
+                //First condition: both children exist
+                if (child2exists & child1exists) {
+                    if (child1 < child2) {
+                        highHeap.set(index, child1);
+                        index = child1index;
+                    } else {
+                        highHeap.set(index, child2);
+                        index = child2index;
+                    }
+                }
+
+                //Second condition: 
+                if (!child1exists & !child2exists) {
+                    notHeaped = false;
+                }
+
+            }
+        }
+    }
+
+    public static void parse() {
         int next;
-        for (int i = 0;i<n;i++){
+        for (int i = 0; i < n; i++) {
             next = Integer.parseInt(argInput[i]);
             insertMax(next);
         }
-        for (int i = 0;i<n;i++){
+        for (int i = 0; i < n; i++) {
             next = Integer.parseInt(argInput[i]);
             insertMin(next);
         }
@@ -96,30 +147,29 @@ public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException {
         long startTime = System.nanoTime();
 
-        log("Begin Program");
-        log("End Program");
-        grabFile("Sample");
-        parse();
-        for (int i=0;i<lowHeap.size();i++){
-            System.out.print(lowHeap.get(i)+" ");
-        }
-        log("");
-
-        for (int i=0;i<lowHeap.size();i++){
-            System.out.print(highHeap.get(i)+" ");
-        }
+//        log("Begin Program");
+//        log("End Program");
+//        grabFile("Sample");
+//        parse();
+//        for (int i=0;i<lowHeap.size();i++){
+//            System.out.print(lowHeap.get(i)+" ");
+//        }
+//        log("");
+//
+//        for (int i=0;i<lowHeap.size();i++){
+//            System.out.print(highHeap.get(i)+" ");
+//        }
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
-        log("Program ran for " + duration / 1000000 + " milliseconds");
+//        log("Program ran for " + duration / 1000000 + " milliseconds");
     }
 
     public static void grabFile(String arg) throws IOException, URISyntaxException {
         argInput = new String[n];
         argInput = data(arg);
-        log(Arrays.toString(argInput));
-        log("n="+n);
+//        log(Arrays.toString(argInput));
+//        log("n="+n);
     }
-
 
 
     public static String[] data(String datafile) throws URISyntaxException, IOException {
@@ -131,7 +181,7 @@ public class Main {
 
         LineNumberReader lnr = new LineNumberReader(new FileReader(new File(fullPath)));
         lnr.skip(Long.MAX_VALUE);
-        n = lnr.getLineNumber()+1;
+        n = lnr.getLineNumber() + 1;
         //System.out.println(lnr.getLineNumber());
         //Add 1 because line index starts at 0
         // Finally, the LineNumberReader object should be closed to prevent resource leak
