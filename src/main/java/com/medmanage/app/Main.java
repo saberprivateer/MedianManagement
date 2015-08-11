@@ -1,9 +1,8 @@
-package medmanage;
+package app;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Main {
