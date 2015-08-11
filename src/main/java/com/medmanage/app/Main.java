@@ -1,4 +1,4 @@
-package app;
+package com.medmanage.app;
 
 import java.io.*;
 import java.net.URISyntaxException;
